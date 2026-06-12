@@ -39,7 +39,14 @@ using namespace std;
 int countVowels(const string& text) {
     // TODO: loop over each character and count vowels.
     // Hint: compare against "aeiouAEIOU" or lowercase the char first.
-    return 0; // TODO: replace
+    int count = 0;
+    for (char c : text){
+        char lc = (c >= 'A' && c <= 'Z') ? (char) (c+32) : c ;
+        if( lc == 'a' || lc == 'e' || lc == 'i' || lc == 'o' || lc == 'u'){
+            count++;
+        }
+    }
+    return count; // TODO: replace
 }
 
 // toUpperCase: return a NEW string with every letter converted to uppercase.
@@ -47,7 +54,13 @@ int countVowels(const string& text) {
 string toUpperCase(const string& text) {
     // TODO: build a result string. For each char, if it is 'a'..'z',
     // convert it to uppercase by subtracting 32 (or use toupper).
-    return ""; // TODO: replace
+    string result = text;
+    for (char& c : result){
+        if(c >= 'a' && c <= 'z'){
+           c = (char) (c - 32); 
+        } 
+    }
+    return result; // TODO: replace
 }
 
 // ------------------------------------------------------------------------
@@ -59,7 +72,12 @@ string toUpperCase(const string& text) {
 // Example: "hello" -> "olleh"
 string reverseString(const string& text) {
     // TODO: build the reversed string (loop from the end, or swap).
-    return ""; // TODO: replace
+    string result;
+    for (int i= (int)text.size()-1; i>=0; i--){
+        result += text[i];
+    }
+    
+    return result; // TODO: replace
 }
 
 // Exercise 2
@@ -68,7 +86,16 @@ string reverseString(const string& text) {
 // (do not strip spaces). Example: "level" -> true, "Level" -> false.
 bool isPalindrome(const string& text) {
     // TODO: compare characters from both ends moving inward.
-    return false; // TODO: replace
+    int left = 0;
+    int right = (int) text.size() - 1;
+    while(left<right){
+        if(text[left] != text[right]){
+            return false;
+        }
+        left++;
+        right--;
+    }
+    return true; // TODO: replace
 }
 
 // Exercise 3
@@ -78,7 +105,16 @@ bool isPalindrome(const string& text) {
 int countWords(const string& text) {
     // TODO: walk through the string tracking when you move from a space
     // into a non-space character (that marks the start of a new word).
-    return 0; // TODO: replace
+    int count = 0;
+    bool inWord = false;
+    for(char c : text){
+        if(c != ' '){
+            if(!inWord){count++; inWord = true;}
+        }else{
+            inWord = false;
+        }
+    }
+    return count; // TODO: replace
 }
 
 // Exercise 4
@@ -87,7 +123,13 @@ int countWords(const string& text) {
 // Example: replaceChar("banana", 'a', 'o') -> "bonono"
 string replaceChar(const string& text, char from, char to) {
     // TODO: copy the string and swap matching characters.
-    return ""; // TODO: replace
+    string result = text;
+    for (char& c : result){
+        if(c == from){
+           c = to; 
+        } 
+    }
+    return result; // TODO: replace
 }
 
 // ------------------------------------------------------------------------
@@ -100,7 +142,17 @@ string replaceChar(const string& text, char from, char to) {
 // Return true on success, false if the file could not be opened.
 bool writeLines(const string& filename, const vector<string>& lines) {
     // TODO: open an ofstream, check is_open(), write each line + "\n".
-    return false; // TODO: replace
+    ofstream out(filename);
+    if(out.is_open()){
+        for(const string& line : lines){
+            out << line << endl;
+        }
+        out.close();
+        return true;
+    }else{
+        return false;
+    }
+    // TODO: replace
 }
 
 // Exercise 6
@@ -109,6 +161,15 @@ bool writeLines(const string& filename, const vector<string>& lines) {
 // cannot be opened, return an empty vector.
 vector<string> readLines(const string& filename) {
     vector<string> result;
+    ifstream in(filename);
+    if(!in.is_open()){
+        return result;
+    }
+    string line;
+    while(getline(in,line)){
+        result.push_back(line);
+    }
+    in.close();
     // TODO: open an ifstream, use getline() in a loop to fill 'result'.
     return result; // TODO: replace contents
 }
@@ -118,7 +179,17 @@ vector<string> readLines(const string& filename) {
 // cannot be opened, return -1.
 int countLinesInFile(const string& filename) {
     // TODO: open the file, count lines with getline(). Return -1 on fail.
-    return -1; // TODO: replace
+    ifstream in(filename);
+    int count = 0;
+    string line;
+    if(!in.is_open()){
+        return -1;
+    }
+    while(getline(in,line)){
+        count++;
+    }
+    in.close();
+    return count; // TODO: replace
 }
 
 // ------------------------------------------------------------------------
@@ -161,10 +232,28 @@ int main() {
     // TODO (Warm-up 1): declare a string variable called 'name', ask the
     //   user "Enter your name: ", read it with getline, then print
     //   "Hello, <name>!".
+    string name;
+    cout << "Enter your name: ";
+    getline(cin, name);
+    cout << "Hello, " << name << "!" << endl;
 
     // TODO (Warm-up 2): declare two int variables a and b, read them from
     //   the user, and print their sum and which one is larger
     //   (or "equal").
+
+    int a,b;
+    cout << "First number: ";
+    cin >> a;
+    cout << "Second number: ";
+    cin >> b;
+    cout << "Sum: " << a + b << endl;
+    if(a==b){
+        cout << "They are equal" << endl;
+    }else if(a>b){
+        cout << a << " is larger" << endl;
+    }else{
+        cout << b << " is larger" << endl;
+    }
 
     // ---- Demonstrations of implemented functions --------------------
     cout << "Vowels in 'Programming': " << countVowels("Programming") << "\n";
