@@ -207,8 +207,13 @@ int wordCountInFile(const string& filename) {
     if(!in.is_open()){
         return -1;
     }
+    int count =0;
+    vector<string> lines = readLines(filename);
+    for(const string& line : lines){
+        count += countWords(line);
+    }
     in.close();
-    return countWords(readLines(filename));
+    return count;
 }
 
 // Challenge B
