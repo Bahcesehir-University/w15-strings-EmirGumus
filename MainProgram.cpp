@@ -203,7 +203,12 @@ int countLinesInFile(const string& filename) {
 // Tip: you may reuse countWords() and readLines().
 int wordCountInFile(const string& filename) {
     // TODO: read the file and sum the word counts of each line.
-    return -1; // TODO: replace
+    ifstream in(filename);
+    if(!in.is_open()){
+        return -1;
+    }
+    in.close();
+    return countWords(readLines(filename));
 }
 
 // Challenge B
